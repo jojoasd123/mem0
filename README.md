@@ -1,171 +1,142 @@
-<p align="center">
-  <a href="https://github.com/mem0ai/mem0">
-    <img src="docs/images/banner-sm.png" width="800px" alt="Mem0 - The Memory Layer for Personalized AI">
-  </a>
-</p>
-<p align="center" style="display: flex; justify-content: center; gap: 20px; align-items: center;">
-  <a href="https://trendshift.io/repositories/11194" target="blank">
-    <img src="https://trendshift.io/api/badge/repositories/11194" alt="mem0ai%2Fmem0 | Trendshift" width="250" height="55"/>
-  </a>
-</p>
+# OpenClaw Mem0 插件 - 火山引擎版
 
-<p align="center">
-  <a href="https://mem0.ai">Learn more</a>
-  ·
-  <a href="https://mem0.dev/DiG">Join Discord</a>
-  ·
-  <a href="https://mem0.dev/demo">Demo</a>
-  ·
-  <a href="https://mem0.dev/openmemory">OpenMemory</a>
-</p>
+为 [OpenClaw](https://github.com/openclaw/openclaw) 代理提供长期记忆能力，由 [Mem0](https://mem0.ai) 驱动，支持火山引擎部署。
 
-<p align="center">
-  <a href="https://mem0.dev/DiG">
-    <img src="https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white" alt="Mem0 Discord">
-  </a>
-  <a href="https://pepy.tech/project/mem0ai">
-    <img src="https://img.shields.io/pypi/dm/mem0ai" alt="Mem0 PyPI - Downloads">
-  </a>
-  <a href="https://github.com/mem0ai/mem0">
-    <img src="https://img.shields.io/github/commit-activity/m/mem0ai/mem0?style=flat-square" alt="GitHub commit activity">
-  </a>
-  <a href="https://pypi.org/project/mem0ai" target="blank">
-    <img src="https://img.shields.io/pypi/v/mem0ai?color=%2334D058&label=pypi%20package" alt="Package version">
-  </a>
-  <a href="https://www.npmjs.com/package/mem0ai" target="blank">
-    <img src="https://img.shields.io/npm/v/mem0ai" alt="Npm package">
-  </a>
-  <a href="https://www.ycombinator.com/companies/mem0">
-    <img src="https://img.shields.io/badge/Y%20Combinator-S24-orange?style=flat-square" alt="Y Combinator S24">
-  </a>
-</p>
+## 功能特性
 
-<p align="center">
-  <a href="https://mem0.ai/research"><strong>📄 Building Production-Ready AI Agents with Scalable Long-Term Memory →</strong></a>
-</p>
-<p align="center">
-  <strong>⚡ +26% Accuracy vs. OpenAI Memory • 🚀 91% Faster • 💰 90% Fewer Tokens</strong>
-</p>
+- **自动召回 (Auto-Recall)** — 在代理响应前，自动搜索相关记忆并注入到上下文中
+- **自动捕获 (Auto-Capture)** — 在代理响应后，自动保存对话中的重要信息
+- **短期/长期双记忆系统** — 会话级（短期）和用户级（长期）记忆分离管理
+- **火山引擎兼容** — 支持连接到火山引擎部署的 Mem0 服务
 
-> **🎉 mem0ai v1.0.0 is now available!** This major release includes API modernization, improved vector store support, and enhanced GCP integration. [See migration guide →](MIGRATION_GUIDE_v1.0.md)
+## 快速开始
 
-##  🔥 Research Highlights
-- **+26% Accuracy** over OpenAI Memory on the LOCOMO benchmark
-- **91% Faster Responses** than full-context, ensuring low-latency at scale
-- **90% Lower Token Usage** than full-context, cutting costs without compromise
-- [Read the full paper](https://mem0.ai/research)
-
-# Introduction
-
-[Mem0](https://mem0.ai) ("mem-zero") enhances AI assistants and agents with an intelligent memory layer, enabling personalized AI interactions. It remembers user preferences, adapts to individual needs, and continuously learns over time—ideal for customer support chatbots, AI assistants, and autonomous systems.
-
-### Key Features & Use Cases
-
-**Core Capabilities:**
-- **Multi-Level Memory**: Seamlessly retains User, Session, and Agent state with adaptive personalization
-- **Developer-Friendly**: Intuitive API, cross-platform SDKs, and a fully managed service option
-
-**Applications:**
-- **AI Assistants**: Consistent, context-rich conversations
-- **Customer Support**: Recall past tickets and user history for tailored help
-- **Healthcare**: Track patient preferences and history for personalized care
-- **Productivity & Gaming**: Adaptive workflows and environments based on user behavior
-
-## 🚀 Quickstart Guide <a name="quickstart"></a>
-
-Choose between our hosted platform or self-hosted package:
-
-### Hosted Platform
-
-Get up and running in minutes with automatic updates, analytics, and enterprise security.
-
-1. Sign up on [Mem0 Platform](https://app.mem0.ai)
-2. Embed the memory layer via SDK or API keys
-
-### Self-Hosted (Open Source)
-
-Install the sdk via pip:
+### 1. 安装插件
 
 ```bash
-pip install mem0ai
+openclaw plugins install @mem0/openclaw-mem0
 ```
 
-Install sdk via npm:
-```bash
-npm install mem0ai
-```
+### 2. 配置火山引擎
 
-### Basic Usage
+在你的 `openclaw.json` 配置文件中添加：
 
-Mem0 requires an LLM to function, with `gpt-4.1-nano-2025-04-14 from OpenAI as the default. However, it supports a variety of LLMs; for details, refer to our [Supported LLMs documentation](https://docs.mem0.ai/components/llms/overview).
-
-First step is to instantiate the memory:
-
-```python
-from openai import OpenAI
-from mem0 import Memory
-
-openai_client = OpenAI()
-memory = Memory()
-
-def chat_with_memories(message: str, user_id: str = "default_user") -> str:
-    # Retrieve relevant memories
-    relevant_memories = memory.search(query=message, user_id=user_id, limit=3)
-    memories_str = "\n".join(f"- {entry['memory']}" for entry in relevant_memories["results"])
-
-    # Generate Assistant response
-    system_prompt = f"You are a helpful AI. Answer the question based on query and memories.\nUser Memories:\n{memories_str}"
-    messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": message}]
-    response = openai_client.chat.completions.create(model="gpt-4.1-nano-2025-04-14", messages=messages)
-    assistant_response = response.choices[0].message.content
-
-    # Create new memories from the conversation
-    messages.append({"role": "assistant", "content": assistant_response})
-    memory.add(messages, user_id=user_id)
-
-    return assistant_response
-
-def main():
-    print("Chat with AI (type 'exit' to quit)")
-    while True:
-        user_input = input("You: ").strip()
-        if user_input.lower() == 'exit':
-            print("Goodbye!")
-            break
-        print(f"AI: {chat_with_memories(user_input)}")
-
-if __name__ == "__main__":
-    main()
-```
-
-For detailed integration steps, see the [Quickstart](https://docs.mem0.ai/quickstart) and [API Reference](https://docs.mem0.ai/api-reference).
-
-## 🔗 Integrations & Demos
-
-- **ChatGPT with Memory**: Personalized chat powered by Mem0 ([Live Demo](https://mem0.dev/demo))
-- **Browser Extension**: Store memories across ChatGPT, Perplexity, and Claude ([Chrome Extension](https://chromewebstore.google.com/detail/onihkkbipkfeijkadecaafbgagkhglop?utm_source=item-share-cb))
-- **Langgraph Support**: Build a customer bot with Langgraph + Mem0 ([Guide](https://docs.mem0.ai/integrations/langgraph))
-- **CrewAI Integration**: Tailor CrewAI outputs with Mem0 ([Example](https://docs.mem0.ai/integrations/crewai))
-
-## 📚 Documentation & Support
-
-- Full docs: https://docs.mem0.ai
-- Community: [Discord](https://mem0.dev/DiG) · [Twitter](https://x.com/mem0ai)
-- Contact: founders@mem0.ai
-
-## Citation
-
-We now have a paper you can cite:
-
-```bibtex
-@article{mem0,
-  title={Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory},
-  author={Chhikara, Prateek and Khant, Dev and Aryan, Saket and Singh, Taranjeet and Yadav, Deshraj},
-  journal={arXiv preprint arXiv:2504.19413},
-  year={2025}
+```json5
+// plugins.entries
+"openclaw-mem0": {
+  "enabled": true,
+  "config": {
+    "mode": "platform",
+    "apiKey": "${MEM0_API_KEY}",
+    "host": "https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com",
+    "userId": "your-user-id"
+  }
 }
 ```
 
-## ⚖️ License
+### 3. 设置环境变量
 
-Apache 2.0 — see the [LICENSE](https://github.com/mem0ai/mem0/blob/main/LICENSE) file for details.
+在你的环境变量中设置 Mem0 API Key：
+
+```bash
+export MEM0_API_KEY="your-api-key-here"
+```
+
+或者在配置中直接填写（不推荐生产环境使用）：
+
+```json5
+"apiKey": "m0-xxxxxxxxxxxxxxxxxxxxx"
+```
+
+## 配置详解
+
+| 配置项 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `mode` | string | 是 | 固定为 `"platform"` |
+| `apiKey` | string | 是 | Mem0 API Key，可使用 `${MEM0_API_KEY}` 引用环境变量 |
+| `host` | string | 是 | 火山引擎 Mem0 服务地址：`https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com` |
+| `userId` | string | 否 | 用户标识，默认 `"default"` |
+| `orgId` | string | 否 | 组织 ID（可选） |
+| `projectId` | string | 否 | 项目 ID（可选） |
+| `autoRecall` | boolean | 否 | 启用自动召回，默认 `true` |
+| `autoCapture` | boolean | 否 | 启用自动捕获，默认 `true` |
+| `topK` | number | 否 | 每次召回的记忆数量，默认 `5` |
+| `searchThreshold` | number | 否 | 相似度阈值 (0-1)，默认 `0.5` |
+
+### 完整配置示例
+
+```json5
+"openclaw-mem0": {
+  "enabled": true,
+  "config": {
+    "mode": "platform",
+    "apiKey": "${MEM0_API_KEY}",
+    "host": "https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com",
+    "userId": "zhangsan",
+    "autoRecall": true,
+    "autoCapture": true,
+    "topK": 10,
+    "searchThreshold": 0.6,
+    "enableGraph": false
+  }
+}
+```
+
+## 代理工具
+
+插件为代理提供以下工具：
+
+| 工具 | 描述 |
+|------|------|
+| `memory_search` | 通过自然语言搜索记忆 |
+| `memory_list` | 列出用户的所有记忆 |
+| `memory_store` | 显式保存某个事实 |
+| `memory_get` | 通过 ID 获取特定记忆 |
+| `memory_forget` | 通过 ID 或查询删除记忆 |
+
+## CLI 命令
+
+```bash
+# 搜索所有记忆（长期 + 会话）
+openclaw mem0 search "用户使用什么编程语言"
+
+# 仅搜索长期记忆
+openclaw mem0 search "用户使用什么编程语言" --scope long-term
+
+# 仅搜索会话/短期记忆
+openclaw mem0 search "用户使用什么编程语言" --scope session
+
+# 查看统计信息
+openclaw mem0 stats
+```
+
+## 工作原理
+
+### 记忆范围
+
+- **Session (短期记忆)** — 使用 `run_id` 与会话绑定，仅在当前对话中有效
+- **User (长期记忆)** — 持久化存储，跨所有会话共享
+
+### 工作流程
+
+1. **Auto-Recall** — 代理响应前，插件搜索 Mem0 找到与当前消息相关的记忆并注入上下文
+2. **Auto-Capture** — 代理响应后，插件将对话发送到 Mem0，Mem0 决定保存哪些内容
+3. 两个过程都在后台静默运行，无需额外提示或配置
+
+## 常见问题
+
+### 如何获取 API Key？
+
+请联系火山引擎 Mem0 服务管理员获取 API Key。
+
+### 连接失败怎么办？
+
+1. 确认 `host` 配置正确：`https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com`
+2. 确认 `apiKey` 有效且有访问权限
+3. 检查网络连接是否可以访问火山引擎服务
+
+### 记忆没有生效？
+
+- 检查 `autoRecall` 和 `autoCapture` 是否为 `true`
+- 调整 `searchThreshold` 阈值（降低可以召回更多记忆）
+- 使用 `openclaw mem0 stats` 查看记忆统计
