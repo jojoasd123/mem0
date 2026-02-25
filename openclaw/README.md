@@ -1,155 +1,142 @@
-# @mem0/openclaw-mem0
+# OpenClaw Mem0 插件 - 火山引擎版
 
-Long-term memory for [OpenClaw](https://github.com/openclaw/openclaw) agents, powered by [Mem0](https://mem0.ai).
+为 [OpenClaw](https://github.com/openclaw/openclaw) 代理提供长期记忆能力，由 [Mem0](https://mem0.ai) 驱动，支持火山引擎部署。
 
-Your agent forgets everything between sessions. This plugin fixes that. It watches conversations, extracts what matters, and brings it back when relevant — automatically.
+## 功能特性
 
-## How it works
+- **自动召回 (Auto-Recall)** — 在代理响应前，自动搜索相关记忆并注入到上下文中
+- **自动捕获 (Auto-Capture)** — 在代理响应后，自动保存对话中的重要信息
+- **短期/长期双记忆系统** — 会话级（短期）和用户级（长期）记忆分离管理
+- **火山引擎兼容** — 支持连接到火山引擎部署的 Mem0 服务
 
-<p align="center">
-  <img src="../docs/images/openclaw-architecture.png" alt="Architecture" width="800" />
-</p>
+## 快速开始
 
-**Auto-Recall** — Before the agent responds, the plugin searches Mem0 for memories that match the current message and injects them into context.
-
-**Auto-Capture** — After the agent responds, the plugin sends the exchange to Mem0. Mem0 decides what's worth keeping — new facts get stored, stale ones updated, duplicates merged.
-
-Both run silently. No prompting, no configuration, no manual calls.
-
-### Short-term vs long-term memory
-
-Memories are organized into two scopes:
-
-- **Session (short-term)** — Auto-capture stores memories scoped to the current session via Mem0's `run_id` / `runId` parameter. These are contextual to the ongoing conversation and automatically recalled alongside long-term memories.
-
-- **User (long-term)** — The agent can explicitly store long-term memories using the `memory_store` tool (with `longTerm: true`, the default). These persist across all sessions for the user.
-
-During **auto-recall**, the plugin searches both scopes and presents them separately — long-term memories first, then session memories — so the agent has full context.
-
-The agent tools (`memory_search`, `memory_list`) accept a `scope` parameter (`"session"`, `"long-term"`, or `"all"`) to control which memories are queried. The `memory_store` tool accepts a `longTerm` boolean (default: `true`) to choose where to store.
-
-All new parameters are optional and backward-compatible — existing configurations work without changes.
-
-## Setup
+### 1. 安装插件
 
 ```bash
 openclaw plugins install @mem0/openclaw-mem0
 ```
 
-### Platform (Mem0 Cloud)
+### 2. 配置火山引擎
 
-Get an API key from [app.mem0.ai](https://app.mem0.ai), then add to your `openclaw.json`:
+在你的 `openclaw.json` 配置文件中添加：
 
 ```json5
 // plugins.entries
 "openclaw-mem0": {
   "enabled": true,
   "config": {
+    "mode": "platform",
     "apiKey": "${MEM0_API_KEY}",
+    "host": "https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com",
     "userId": "your-user-id"
   }
 }
 ```
 
-### Open-Source (Self-hosted)
+### 3. 设置环境变量
 
-No Mem0 key needed. Requires `OPENAI_API_KEY` for default embeddings/LLM.
+在你的环境变量中设置 Mem0 API Key：
+
+```bash
+export MEM0_API_KEY="your-api-key-here"
+```
+
+或者在配置中直接填写（不推荐生产环境使用）：
+
+```json5
+"apiKey": "m0-xxxxxxxxxxxxxxxxxxxxx"
+```
+
+## 配置详解
+
+| 配置项 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `mode` | string | 是 | 固定为 `"platform"` |
+| `apiKey` | string | 是 | Mem0 API Key，可使用 `${MEM0_API_KEY}` 引用环境变量 |
+| `host` | string | 是 | 火山引擎 Mem0 服务地址：`https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com` |
+| `userId` | string | 否 | 用户标识，默认 `"default"` |
+| `orgId` | string | 否 | 组织 ID（可选） |
+| `projectId` | string | 否 | 项目 ID（可选） |
+| `autoRecall` | boolean | 否 | 启用自动召回，默认 `true` |
+| `autoCapture` | boolean | 否 | 启用自动捕获，默认 `true` |
+| `topK` | number | 否 | 每次召回的记忆数量，默认 `5` |
+| `searchThreshold` | number | 否 | 相似度阈值 (0-1)，默认 `0.5` |
+
+### 完整配置示例
 
 ```json5
 "openclaw-mem0": {
   "enabled": true,
   "config": {
-    "mode": "open-source",
-    "userId": "your-user-id"
+    "mode": "platform",
+    "apiKey": "${MEM0_API_KEY}",
+    "host": "https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com",
+    "userId": "zhangsan",
+    "autoRecall": true,
+    "autoCapture": true,
+    "topK": 10,
+    "searchThreshold": 0.6,
+    "enableGraph": false
   }
 }
 ```
 
-Sensible defaults out of the box. To customize the embedder, vector store, or LLM:
+## 代理工具
 
-```json5
-"config": {
-  "mode": "open-source",
-  "userId": "your-user-id",
-  "oss": {
-    "embedder": { "provider": "openai", "config": { "model": "text-embedding-3-small" } },
-    "vectorStore": { "provider": "qdrant", "config": { "host": "localhost", "port": 6333 } },
-    "llm": { "provider": "openai", "config": { "model": "gpt-4o" } }
-  }
-}
-```
+插件为代理提供以下工具：
 
-All `oss` fields are optional. See [Mem0 OSS docs](https://docs.mem0.ai/open-source/node-quickstart) for providers.
+| 工具 | 描述 |
+|------|------|
+| `memory_search` | 通过自然语言搜索记忆 |
+| `memory_list` | 列出用户的所有记忆 |
+| `memory_store` | 显式保存某个事实 |
+| `memory_get` | 通过 ID 获取特定记忆 |
+| `memory_forget` | 通过 ID 或查询删除记忆 |
 
-## Agent tools
-
-The agent gets five tools it can call during conversations:
-
-| Tool | Description |
-|------|-------------|
-| `memory_search` | Search memories by natural language |
-| `memory_list` | List all stored memories for a user |
-| `memory_store` | Explicitly save a fact |
-| `memory_get` | Retrieve a memory by ID |
-| `memory_forget` | Delete by ID or by query |
-
-## CLI
+## CLI 命令
 
 ```bash
-# Search all memories (long-term + session)
-openclaw mem0 search "what languages does the user know"
+# 搜索所有记忆（长期 + 会话）
+openclaw mem0 search "用户使用什么编程语言"
 
-# Search only long-term memories
-openclaw mem0 search "what languages does the user know" --scope long-term
+# 仅搜索长期记忆
+openclaw mem0 search "用户使用什么编程语言" --scope long-term
 
-# Search only session/short-term memories
-openclaw mem0 search "what languages does the user know" --scope session
+# 仅搜索会话/短期记忆
+openclaw mem0 search "用户使用什么编程语言" --scope session
 
-# Stats
+# 查看统计信息
 openclaw mem0 stats
 ```
 
-## Options
+## 工作原理
 
-### General
+### 记忆范围
 
-| Key | Type | Default | |
-|-----|------|---------|---|
-| `mode` | `"platform"` \| `"open-source"` | `"platform"` | Which backend to use |
-| `userId` | `string` | `"default"` | Scope memories per user |
-| `autoRecall` | `boolean` | `true` | Inject memories before each turn |
-| `autoCapture` | `boolean` | `true` | Store facts after each turn |
-| `topK` | `number` | `5` | Max memories per recall |
-| `searchThreshold` | `number` | `0.3` | Min similarity (0–1) |
+- **Session (短期记忆)** — 使用 `run_id` 与会话绑定，仅在当前对话中有效
+- **User (长期记忆)** — 持久化存储，跨所有会话共享
 
-### Platform mode
+### 工作流程
 
-| Key | Type | Default | |
-|-----|------|---------|---|
-| `apiKey` | `string` | — | **Required.** Mem0 API key (supports `${MEM0_API_KEY}`) |
-| `orgId` | `string` | — | Organization ID |
-| `projectId` | `string` | — | Project ID |
-| `enableGraph` | `boolean` | `false` | Entity graph for relationships |
-| `customInstructions` | `string` | *(built-in)* | Extraction rules — what to store, how to format |
-| `customCategories` | `object` | *(12 defaults)* | Category name → description map for tagging |
+1. **Auto-Recall** — 代理响应前，插件搜索 Mem0 找到与当前消息相关的记忆并注入上下文
+2. **Auto-Capture** — 代理响应后，插件将对话发送到 Mem0，Mem0 决定保存哪些内容
+3. 两个过程都在后台静默运行，无需额外提示或配置
 
-### Open-source mode
+## 常见问题
 
-Works with zero extra config. The `oss` block lets you swap out any component:
+### 如何获取 API Key？
 
-| Key | Type | Default | |
-|-----|------|---------|---|
-| `customPrompt` | `string` | *(built-in)* | Extraction prompt for memory processing |
-| `oss.embedder.provider` | `string` | `"openai"` | Embedding provider (`"openai"`, `"ollama"`, etc.) |
-| `oss.embedder.config` | `object` | — | Provider config: `apiKey`, `model`, `baseURL` |
-| `oss.vectorStore.provider` | `string` | `"memory"` | Vector store (`"memory"`, `"qdrant"`, `"chroma"`, etc.) |
-| `oss.vectorStore.config` | `object` | — | Provider config: `host`, `port`, `collectionName`, `dimension` |
-| `oss.llm.provider` | `string` | `"openai"` | LLM provider (`"openai"`, `"anthropic"`, `"ollama"`, etc.) |
-| `oss.llm.config` | `object` | — | Provider config: `apiKey`, `model`, `baseURL`, `temperature` |
-| `oss.historyDbPath` | `string` | — | SQLite path for memory edit history |
+请联系火山引擎 Mem0 服务管理员获取 API Key。
 
-Everything inside `oss` is optional — defaults use OpenAI embeddings (`text-embedding-3-small`), in-memory vector store, and OpenAI LLM. Override only what you need.
+### 连接失败怎么办？
 
-## License
+1. 确认 `host` 配置正确：`https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com`
+2. 确认 `apiKey` 有效且有访问权限
+3. 检查网络连接是否可以访问火山引擎服务
 
-Apache 2.0
+### 记忆没有生效？
+
+- 检查 `autoRecall` 和 `autoCapture` 是否为 `true`
+- 调整 `searchThreshold` 阈值（降低可以召回更多记忆）
+- 使用 `openclaw mem0 stats` 查看记忆统计
