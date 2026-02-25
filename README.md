@@ -13,8 +13,15 @@
 
 ### 1. 安装插件
 
+从本地源码目录安装：
+
 ```bash
-openclaw plugins install @mem0/openclaw-mem0
+# 克隆仓库（如果还没克隆）
+git clone https://github.com/jojoasd123/mem0.git
+cd mem0/openclaw
+
+# 从本地目录安装插件
+openclaw plugins install .
 ```
 
 ### 2. 配置火山引擎

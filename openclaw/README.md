@@ -13,8 +13,14 @@
 
 ### 1. 安装插件
 
+从本地源码目录安装：
+
 ```bash
-openclaw plugins install @mem0/openclaw-mem0
+# 进入 openclaw 目录
+cd openclaw
+
+# 从本地目录安装插件
+openclaw plugins install .
 ```
 
 ### 2. 配置火山引擎
