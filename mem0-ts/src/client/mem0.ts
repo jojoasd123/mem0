@@ -110,7 +110,15 @@ export default class MemoryClient {
   private async _initializeClient() {
     try {
       // Generate telemetry ID
-      await this.ping();
+      try {
+        await this.ping();
+      } catch (pingError: any) {
+        console.warn(
+          "Ping failed during initialization, continuing anyway:",
+          pingError?.message,
+        );
+        // 即使 ping 失败也继续，因为火山引擎可能有不同的响应格式
+      }
 
       if (!this.telemetryId) {
         this.telemetryId = generateHash(this.apiKey);
@@ -155,7 +163,12 @@ export default class MemoryClient {
     });
     if (!response.ok) {
       const errorData = await response.text();
-      throw new APIError(`API request failed: ${errorData}`);
+      console.error(
+        `API request failed - URL: ${url}, Status: ${response.status}, Response: ${errorData}`,
+      );
+      throw new APIError(
+        `API request failed (${response.status}): ${errorData}`,
+      );
     }
     const jsonResponse = await response.json();
     return jsonResponse;
@@ -190,13 +203,8 @@ export default class MemoryClient {
       }
 
       // 兼容火山引擎的返回格式 - 火山引擎不返回 status: "ok"
-      // 只要有 project_id 或 org_id 就认为成功
-      const hasProjectOrOrg = response.project_id || response.org_id;
-      const hasStatusOk = response.status === "ok";
-
-      if (!hasStatusOk && !hasProjectOrOrg) {
-        throw new APIError(response.message || "API Key is invalid");
-      }
+      // 只要 HTTP 状态码是 200 就认为成功（因为 _fetchWithErrorHandling 已经验证了 response.ok）
+      // 对于火山引擎，我们不严格检查返回内容，只要请求成功就通过
 
       const { org_id, project_id, user_email } = response;
 

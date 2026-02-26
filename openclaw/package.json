@@ -1,19 +1,20 @@
 {
-  "name": "@mem0/openclaw-mem0",
-  "version": "0.1.2",
+  "name": "@volcengine/openclaw-mem0",
+  "version": "0.1.2-volcano.1",
   "type": "module",
-  "description": "Mem0 memory backend for OpenClaw — platform or self-hosted open-source",
+  "description": "Mem0 memory backend for OpenClaw — Volcano Engine Compatible",
   "license": "Apache-2.0",
   "keywords": [
     "openclaw",
     "plugin",
     "memory",
     "mem0",
+    "volcengine",
     "long-term-memory"
   ],
   "dependencies": {
     "@sinclair/typebox": "0.34.47",
-    "mem0ai": "^2.2.1"
+    "@volcengine/mem0ai": "^2.2.3-volcano.1"
   },
   "openclaw": {
     "extensions": [

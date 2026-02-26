@@ -1,7 +1,7 @@
 {
-  "name": "mem0ai",
-  "version": "2.2.3",
-  "description": "The Memory Layer For Your AI Apps",
+  "name": "@volcengine/mem0ai",
+  "version": "2.2.3-volcano.1",
+  "description": "The Memory Layer For Your AI Apps (Volcano Engine Compatible)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
