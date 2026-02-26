@@ -1,0 +1,85 @@
+// OpenClaw Mem0 插件配置示例（火山引擎版）
+// 用于云端芋圆和本地芋圆的共享记忆配置
+
+{
+  "plugins": {
+    "entries": {
+      "openclaw-mem0": {
+        "enabled": true,
+        "config": {
+          // ========== 必需配置 ==========
+
+          // 必须设置为 "platform" 来使用火山引擎服务
+          "mode": "platform",
+
+          // Mem0 API Key
+          // 方式1: 使用环境变量 ${MEM0_API_KEY}（推荐）
+          // 方式2: 直接填入 API Key
+          "apiKey": "${MEM0_API_KEY}",
+
+          // 火山引擎 Mem0 服务地址
+          "host": "https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com:8000",
+
+          // 用户标识 - 云端芋圆和本地芋圆必须使用相同的值！
+          "userId": "yuyuan-memory",
+
+          // ========== 可选配置 ==========
+
+          // 组织 ID（如需要）
+          // "orgId": "your-org-id",
+
+          // 项目 ID（如需要）
+          // "projectId": "your-project-id",
+
+          // ========== 功能开关 ==========
+
+          // 自动召回：在响应前自动注入相关记忆
+          "autoRecall": true,
+
+          // 自动捕获：在响应后自动保存对话内容
+          "autoCapture": true,
+
+          // ========== 召回配置 ==========
+
+          // 每次召回的记忆数量
+          // 增加这个值可以获取更多相关记忆，但可能会有噪音
+          "topK": 10,
+
+          // 相似度阈值 (0-1)
+          // 降低这个值可以召回更多记忆（但可能不太相关）
+          // 提高这个值可以只召回最相关的记忆
+          "searchThreshold": 0.5,
+
+          // 启用记忆图谱（如果火山引擎支持）
+          "enableGraph": false
+        }
+      }
+    }
+  }
+}
+
+// ========== 其他配置变体 ==========
+
+// 变体1: 更宽松的召回（适合需要更多上下文的场景）
+/*
+"config": {
+  "mode": "platform",
+  "apiKey": "${MEM0_API_KEY}",
+  "host": "https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com:8000",
+  "userId": "yuyuan-memory",
+  "topK": 15,              // 更多记忆
+  "searchThreshold": 0.3    // 更低的阈值
+}
+*/
+
+// 变体2: 更精确的召回（适合只需要高相关性记忆的场景）
+/*
+"config": {
+  "mode": "platform",
+  "apiKey": "${MEM0_API_KEY}",
+  "host": "https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com:8000",
+  "userId": "yuyuan-memory",
+  "topK": 5,               // 更少记忆
+  "searchThreshold": 0.7   // 更高的阈值
+}
+*/
