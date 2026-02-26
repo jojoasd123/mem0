@@ -34,7 +34,7 @@ openclaw plugins install .
   "config": {
     "mode": "platform",
     "apiKey": "${MEM0_API_KEY}",
-    "host": "https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com",
+    "host": "https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com:8000",
     "userId": "your-user-id"
   }
 }
@@ -60,7 +60,7 @@ export MEM0_API_KEY="your-api-key-here"
 |--------|------|------|------|
 | `mode` | string | 是 | 固定为 `"platform"` |
 | `apiKey` | string | 是 | Mem0 API Key，可使用 `${MEM0_API_KEY}` 引用环境变量 |
-| `host` | string | 是 | 火山引擎 Mem0 服务地址：`https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com` |
+| `host` | string | 是 | 火山引擎 Mem0 服务地址：`https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com:8000`（注意需要加上端口 :8000） |
 | `userId` | string | 否 | 用户标识，默认 `"default"` |
 | `orgId` | string | 否 | 组织 ID（可选） |
 | `projectId` | string | 否 | 项目 ID（可选） |
@@ -77,7 +77,7 @@ export MEM0_API_KEY="your-api-key-here"
   "config": {
     "mode": "platform",
     "apiKey": "${MEM0_API_KEY}",
-    "host": "https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com",
+    "host": "https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com:8000",
     "userId": "zhangsan",
     "autoRecall": true,
     "autoCapture": true,
@@ -137,7 +137,7 @@ openclaw mem0 stats
 
 ### 连接失败怎么办？
 
-1. 确认 `host` 配置正确：`https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com`
+1. 确认 `host` 配置正确：`https://mem0-cnlfjzigaku8gczkzo.mem0.volces.com:8000`（必须加上端口 :8000）
 2. 确认 `apiKey` 有效且有访问权限
 3. 检查网络连接是否可以访问火山引擎服务
 

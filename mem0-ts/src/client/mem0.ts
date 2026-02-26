@@ -189,7 +189,12 @@ export default class MemoryClient {
         throw new APIError("Invalid response format from ping endpoint");
       }
 
-      if (response.status !== "ok") {
+      // 兼容火山引擎的返回格式 - 火山引擎不返回 status: "ok"
+      // 只要有 project_id 或 org_id 就认为成功
+      const hasProjectOrOrg = response.project_id || response.org_id;
+      const hasStatusOk = response.status === "ok";
+
+      if (!hasStatusOk && !hasProjectOrOrg) {
         throw new APIError(response.message || "API Key is invalid");
       }
 
@@ -232,6 +237,11 @@ export default class MemoryClient {
 
     if (options.api_version) {
       options.version = options.api_version.toString() || "v2";
+    }
+
+    // 火山引擎只支持异步模式，默认启用 async_mode
+    if (options.async_mode === undefined) {
+      options.async_mode = true;
     }
 
     const payload = this._preparePayload(messages, options);
