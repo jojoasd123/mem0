@@ -1,8 +1,17 @@
 {
-  "name": "@volcengine/openclaw-mem0",
+  "name": "@jojoasd123/openclaw-mem0-volcengine",
   "version": "0.1.2-volcano.1",
   "type": "module",
   "description": "Mem0 memory backend for OpenClaw — Volcano Engine Compatible",
+  "main": "./index.ts",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "files": [
+    "index.ts",
+    "openclaw.plugin.json",
+    "README.md"
+  ],
   "license": "Apache-2.0",
   "keywords": [
     "openclaw",
@@ -12,9 +21,20 @@
     "volcengine",
     "long-term-memory"
   ],
+  "author": "jojoasd123",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jojoasd123/mem0.git"
+  },
   "dependencies": {
     "@sinclair/typebox": "0.34.47",
-    "@volcengine/mem0ai": "^2.2.3-volcano.1"
+    "@jojoasd123/mem0ai-volcengine": "^2.2.3-volcano.1"
+  },
+  "peerDependencies": {
+    "openclaw": "*"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "openclaw": {
     "extensions": [

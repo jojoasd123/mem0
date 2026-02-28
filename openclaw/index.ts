@@ -137,7 +137,7 @@ class PlatformProvider implements Mem0Provider {
   }
 
   private async _init(): Promise<void> {
-    const { default: MemoryClient } = await import("@volcengine/mem0ai");
+    const { default: MemoryClient } = await import("@jojoasd123/mem0ai-volcengine");
     const opts: Record<string, any> = { apiKey: this.apiKey };
     if (this.host) opts.host = this.host;
     if (this.orgId) opts.organizationId = this.orgId;
@@ -227,7 +227,7 @@ class OSSProvider implements Mem0Provider {
   }
 
   private async _init(): Promise<void> {
-    const { Memory } = await import("@volcengine/mem0ai/oss");
+    const { Memory } = await import("@jojoasd123/mem0ai-volcengine/oss");
 
     const config: Record<string, unknown> = { version: "v1.1" };
 

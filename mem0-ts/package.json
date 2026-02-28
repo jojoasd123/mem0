@@ -1,5 +1,5 @@
 {
-  "name": "@volcengine/mem0ai",
+  "name": "@jojoasd123/mem0ai-volcengine",
   "version": "2.2.3-volcano.1",
   "description": "The Memory Layer For Your AI Apps (Volcano Engine Compatible)",
   "main": "./dist/index.js",
