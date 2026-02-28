@@ -77,7 +77,7 @@ if (options.async_mode === undefined) {
 ### 环境变量
 
 ```bash
-export MEM0_API_KEY="7814ca22-d815-5db8-bea1-8a688d6dd366"
+export MEM0_API_KEY="your-api-key-here"
 ```
 
 ## 重新构建和安装
