@@ -1,0 +1,16 @@
+{
+  "task_id": "task_1772356589",
+  "original_task": "研究 5 个不同的 AI 框架并对比它们的优缺点",
+  "start_time": 1772356589.3642123,
+  "end_time": 1772356591.3664446,
+  "subtask_count": 1,
+  "parallel_count": 1,
+  "completion_rate": 1.0,
+  "duration_seconds": 2.0,
+  "agent_usage": {
+    "main": 1
+  },
+  "parallel_efficiency": 0.9999290304765281,
+  "avg_duration": 2.0,
+  "failure_rate": 0.0
+}

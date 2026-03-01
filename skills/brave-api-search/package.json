@@ -1,0 +1,9 @@
+{
+  "name": "brave-api-search",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Web search via Brave Search API (Official API, requires API key)",
+  "author": "yuyuan",
+  "license": "MIT",
+  "dependencies": {}
+}

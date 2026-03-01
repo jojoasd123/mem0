@@ -1,0 +1,27 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-02-19",
+  "scores": {
+    "vault/记忆同步协议": {
+      "baseScore": 1.0,
+      "typeWeight": "infinity",
+      "lastAccessed": "2026-02-19",
+      "accessCount": 1,
+      "status": "vault"
+    },
+    "semantic/关于主人": {
+      "baseScore": 1.0,
+      "typeWeight": 1.5,
+      "lastAccessed": "2026-02-19",
+      "accessCount": 1,
+      "status": "active"
+    },
+    "graph/entities/主人-雷雷": {
+      "baseScore": 1.0,
+      "typeWeight": 1.2,
+      "lastAccessed": "2026-02-19",
+      "accessCount": 1,
+      "status": "active"
+    }
+  }
+}

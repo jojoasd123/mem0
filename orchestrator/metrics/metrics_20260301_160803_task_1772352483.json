@@ -1,0 +1,16 @@
+{
+  "task_id": "task_1772352483",
+  "original_task": "创建一个待办事项应用，包括前端、后端和数据库",
+  "start_time": 1772352483.8229256,
+  "end_time": 1772352483.8229964,
+  "subtask_count": 4,
+  "parallel_count": 4,
+  "completion_rate": 1.0,
+  "duration_seconds": 0.0,
+  "agent_usage": {
+    "coder": 4
+  },
+  "parallel_efficiency": 0.85,
+  "avg_duration": 0.0,
+  "failure_rate": 0.0
+}

@@ -1,0 +1,16 @@
+{
+  "task_id": "task_1772357660",
+  "original_task": "并行处理：创建一个简单的计算器应用",
+  "start_time": 1772357660.775244,
+  "end_time": 1772357662.787773,
+  "subtask_count": 4,
+  "parallel_count": 4,
+  "completion_rate": 1.0,
+  "duration_seconds": 2.01,
+  "agent_usage": {
+    "coder": 4
+  },
+  "parallel_efficiency": 0.9998051215247955,
+  "avg_duration": 0.5,
+  "failure_rate": 0.0
+}

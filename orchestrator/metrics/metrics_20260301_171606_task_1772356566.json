@@ -1,0 +1,16 @@
+{
+  "task_id": "task_1772356566",
+  "original_task": "开发一个简单的博客系统，包括用户认证和文章管理",
+  "start_time": 1772356566.109087,
+  "end_time": 1772356574.1177628,
+  "subtask_count": 4,
+  "parallel_count": 4,
+  "completion_rate": 1.0,
+  "duration_seconds": 8.01,
+  "agent_usage": {
+    "coder": 4
+  },
+  "parallel_efficiency": 0.9999517427692524,
+  "avg_duration": 2.0,
+  "failure_rate": 0.0
+}

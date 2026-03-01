@@ -1,0 +1,16 @@
+{
+  "task_id": "task_1772355657",
+  "original_task": "开发一个电商网站，包括用户系统、商品管理、订单处理和支付集成",
+  "start_time": 1772355657.3830876,
+  "end_time": 1772355657.3831575,
+  "subtask_count": 4,
+  "parallel_count": 4,
+  "completion_rate": 1.0,
+  "duration_seconds": 0.0,
+  "agent_usage": {
+    "coder": 4
+  },
+  "parallel_efficiency": 0.85,
+  "avg_duration": 0.0,
+  "failure_rate": 0.0
+}

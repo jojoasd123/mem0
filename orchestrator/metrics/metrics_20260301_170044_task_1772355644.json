@@ -1,0 +1,16 @@
+{
+  "task_id": "task_1772355644",
+  "original_task": "创建一个简单的 Python 脚本，读取 CSV 文件并生成图表",
+  "start_time": 1772355644.6651425,
+  "end_time": 1772355644.6651962,
+  "subtask_count": 1,
+  "parallel_count": 1,
+  "completion_rate": 1.0,
+  "duration_seconds": 0.0,
+  "agent_usage": {
+    "video": 1
+  },
+  "parallel_efficiency": 0.85,
+  "avg_duration": 0.0,
+  "failure_rate": 0.0
+}
